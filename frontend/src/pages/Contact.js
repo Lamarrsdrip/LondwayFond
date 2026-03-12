@@ -9,7 +9,8 @@ const offices = [
     phone: "+44 20 7000 0000",
     email: "london@londwayfond.com",
     hours: "Mon - Fri: 9:00 AM - 6:00 PM GMT",
-    image: "https://images.unsplash.com/photo-1765375411306-9b19cb5797a3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxsb25kb24lMjBjYW5hcnklMjB3aGFyZiUyMHNreWxpbmUlMjBsdXh1cnklMjBza3lzY3JhcGVyfGVufDB8fHx8MTc3MzMxMTc3NHww&ixlib=rb-4.1.0&q=85"
+    image: "https://images.unsplash.com/photo-1765375411306-9b19cb5797a3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxsb25kb24lMjBjYW5hcnklMjB3aGFyZiUyMHNreWxpbmUlMjBsdXh1cnklMjBza3lzY3JhcGVyfGVufDB8fHx8MTc3MzMxMTc3NHww&ixlib=rb-4.1.0&q=85",
+    vipOnly: true
   },
   {
     name: "New York Headquarters",
@@ -17,7 +18,8 @@ const offices = [
     phone: "+1 212 000 0000",
     email: "newyork@londwayfond.com",
     hours: "Mon - Fri: 9:00 AM - 6:00 PM EST",
-    image: "https://images.unsplash.com/photo-1711069260590-9f3dec0b9f23?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHxuZXclMjB5b3JrJTIwY2l0eSUyMHNreWxpbmUlMjBzdW5zZXR8ZW58MHx8fHwxNzczMzExNzg3fDA&ixlib=rb-4.1.0&q=85"
+    image: "https://images.unsplash.com/photo-1711069260590-9f3dec0b9f23?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHxuZXclMjB5b3JrJTIwY2l0eSUyMHNreWxpbmUlMjBzdW5zZXR8ZW58MHx8fHwxNzczMzExNzg3fDA&ixlib=rb-4.1.0&q=85",
+    vipOnly: true
   }
 ];
 
@@ -87,9 +89,16 @@ export default function Contact() {
 
                   <div className="flex items-center gap-3">
                     <Phone className="w-5 h-5 text-[#C9A227] flex-shrink-0" />
-                    <a href={`tel:${office.phone}`} className="text-[#0A1628] hover:text-[#C9A227] transition-colors">
-                      {office.phone}
-                    </a>
+                    <div>
+                      <a href={`tel:${office.phone}`} className="text-[#0A1628] hover:text-[#C9A227] transition-colors">
+                        {office.phone}
+                      </a>
+                      {office.vipOnly && (
+                        <span className="ml-2 text-xs px-2 py-0.5 bg-[#C9A227] text-[#0A1628] rounded-full font-semibold">
+                          VIP Only
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-3">

@@ -132,7 +132,9 @@ def create_token(user_id: str, is_admin: bool = False) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 def generate_account_number() -> str:
-    return "LWF" + "".join([str(uuid.uuid4().int % 10) for _ in range(10)])
+    """Generate a 12-digit account number (pure numbers)"""
+    import random
+    return "".join([str(random.randint(0, 9)) for _ in range(12)])
 
 def generate_card_number() -> str:
     return "4" + "".join([str(uuid.uuid4().int % 10) for _ in range(15)])

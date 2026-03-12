@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth, API } from "@/App";
 import axios from "axios";
-import { CreditCard, Plus, Snowflake, Trash2, Play, AlertCircle, X, Wifi } from "lucide-react";
+import { CreditCard, Plus, Snowflake, Trash2, Play, AlertCircle, X, Wifi, Eye, EyeOff, Copy, Check } from "lucide-react";
 
 export default function Cards() {
   const { user, token } = useAuth();
@@ -11,6 +11,8 @@ export default function Cards() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
+  const [showCVV, setShowCVV] = useState({});
+  const [copied, setCopied] = useState(null);
 
   useEffect(() => {
     fetchCards();
@@ -84,17 +86,24 @@ export default function Cards() {
     }
   };
 
+  const copyToClipboard = async (text, cardId) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(cardId);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
   const formatCardNumber = (number) => {
     return number.replace(/(\d{4})/g, '$1 ').trim();
   };
 
   return (
     <DashboardLayout>
-      <div data-testid="cards-page">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div className="space-y-6 animate-fade-in" data-testid="cards-page">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="font-display text-3xl font-bold text-[#0A1628]">Cards</h1>
-            <p className="text-[#64748B]">Manage your virtual cards</p>
+            <h1 className="font-display text-3xl font-bold text-[#0C0F1A] mb-2">Virtual Cards</h1>
+            <p className="text-neutral-500">Manage your virtual cards for secure payments</p>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
@@ -107,75 +116,102 @@ export default function Cards() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-12">
+          <div className="flex justify-center py-20">
             <div className="spinner" />
           </div>
         ) : cards.length === 0 ? (
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-12 text-center">
-            <CreditCard className="w-16 h-16 mx-auto mb-4 text-[#E2E8F0]" />
-            <h3 className="text-lg font-semibold text-[#0A1628] mb-2">No Cards Yet</h3>
-            <p className="text-[#64748B] mb-6">Create your first virtual card to get started</p>
+          <div className="card p-16 text-center">
+            <div className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
+              <CreditCard className="w-12 h-12 text-neutral-400" />
+            </div>
+            <h3 className="font-semibold text-[#0C0F1A] mb-2 text-xl">No Cards Yet</h3>
+            <p className="text-neutral-500 mb-6 max-w-sm mx-auto">
+              Create your first virtual card to start making secure online purchases
+            </p>
             <button
               onClick={() => setShowCreateModal(true)}
               className="btn-primary inline-flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
-              Create Virtual Card
+              Create Your First Card
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {cards.map((card, index) => (
-              <div key={card.id} className="relative" data-testid={`card-${index}`}>
+              <div key={card.id} className="space-y-4" data-testid={`card-${index}`}>
                 {/* Card Visual */}
-                <div className={`virtual-card ${index % 2 === 0 ? '' : 'virtual-card-gold'} aspect-[1.586/1]`}>
-                  <div className="flex justify-between items-start mb-8">
-                    <div className="font-display font-bold text-lg">
-                      <span className={index % 2 === 0 ? 'text-white' : 'text-[#0A1628]'}>Londway</span>
-                      <span className="text-[#C9A227]">Fond</span>
+                <div className={`virtual-card relative ${index % 2 === 0 ? '' : 'virtual-card-gold'}`}>
+                  {/* Card Content */}
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-auto">
+                      <div className="font-display font-bold text-lg">
+                        <span className={index % 2 === 0 ? 'text-white' : 'text-[#0C0F1A]'}>Londway</span>
+                        <span className={index % 2 === 0 ? 'text-[#D4A853]' : 'text-[#0C0F1A]'}>Fond</span>
+                      </div>
+                      <Wifi className={`w-6 h-6 rotate-90 ${index % 2 === 0 ? 'text-white/50' : 'text-[#0C0F1A]/50'}`} />
                     </div>
-                    <Wifi className="w-6 h-6 rotate-90 opacity-70" />
-                  </div>
-                  
-                  <div className="card-chip mb-4" />
-                  
-                  <p className="font-mono text-lg tracking-wider mb-4">
-                    {formatCardNumber(card.card_number)}
-                  </p>
-                  
-                  <div className="flex justify-between items-end">
-                    <div>
-                      <p className="text-xs opacity-70 mb-0.5">CARD HOLDER</p>
-                      <p className="font-semibold text-sm">{card.card_holder}</p>
+                    
+                    <div className="card-chip my-4" />
+                    
+                    <div className="flex items-center gap-2 mb-4">
+                      <p className={`font-mono text-lg tracking-[0.2em] ${index % 2 === 0 ? 'text-white' : 'text-[#0C0F1A]'}`}>
+                        {formatCardNumber(card.card_number)}
+                      </p>
+                      <button 
+                        onClick={() => copyToClipboard(card.card_number, card.id)}
+                        className={`p-1 rounded hover:bg-white/10 transition-colors ${index % 2 === 0 ? 'text-white/70' : 'text-[#0C0F1A]/70'}`}
+                      >
+                        {copied === card.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </button>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs opacity-70 mb-0.5">EXPIRES</p>
-                      <p className="font-mono">{card.expiry_date}</p>
+                    
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <p className={`text-[10px] uppercase tracking-wider mb-1 ${index % 2 === 0 ? 'text-white/50' : 'text-[#0C0F1A]/50'}`}>Card Holder</p>
+                        <p className={`font-medium text-sm ${index % 2 === 0 ? 'text-white' : 'text-[#0C0F1A]'}`}>{card.card_holder}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`text-[10px] uppercase tracking-wider mb-1 ${index % 2 === 0 ? 'text-white/50' : 'text-[#0C0F1A]/50'}`}>Expires</p>
+                        <p className={`font-mono ${index % 2 === 0 ? 'text-white' : 'text-[#0C0F1A]'}`}>{card.expiry_date}</p>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Frozen Overlay */}
                   {card.status === 'frozen' && (
-                    <div className="absolute inset-0 bg-blue-900/80 rounded-2xl flex items-center justify-center">
-                      <div className="text-center">
-                        <Snowflake className="w-12 h-12 text-blue-200 mx-auto mb-2" />
-                        <p className="text-blue-200 font-semibold">Card Frozen</p>
+                    <div className="absolute inset-0 bg-blue-900/90 rounded-[20px] flex flex-col items-center justify-center backdrop-blur-sm">
+                      <div className="w-16 h-16 rounded-2xl bg-blue-400/20 flex items-center justify-center mb-3">
+                        <Snowflake className="w-8 h-8 text-blue-300" />
                       </div>
+                      <p className="text-blue-200 font-semibold text-lg">Card Frozen</p>
+                      <p className="text-blue-300/70 text-sm">Activate to use</p>
                     </div>
                   )}
                 </div>
 
-                {/* Card Details */}
-                <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 mt-4">
+                {/* Card Actions */}
+                <div className="card p-4">
                   <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p className="text-sm text-[#64748B]">CVV</p>
-                      <p className="font-mono font-semibold text-[#0A1628]">{card.cvv}</p>
+                    <div className="flex items-center gap-3">
+                      <span className="text-neutral-500 text-sm">CVV:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-bold text-[#0C0F1A]">
+                          {showCVV[card.id] ? card.cvv : '•••'}
+                        </span>
+                        <button 
+                          onClick={() => setShowCVV({...showCVV, [card.id]: !showCVV[card.id]})}
+                          className="text-neutral-400 hover:text-neutral-600"
+                        >
+                          {showCVV[card.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-[#64748B]">Spending Limit</p>
-                      <p className="font-mono font-semibold text-[#0A1628]">
+                      <span className="text-neutral-500 text-sm">Limit: </span>
+                      <span className="font-mono font-semibold text-[#0C0F1A]">
                         ${card.spending_limit.toLocaleString()}
-                      </p>
+                      </span>
                     </div>
                   </div>
 
@@ -183,7 +219,7 @@ export default function Cards() {
                     {card.status === 'frozen' ? (
                       <button
                         onClick={() => activateCard(card.id)}
-                        className="flex-1 py-2 px-3 bg-green-50 text-green-600 rounded-lg flex items-center justify-center gap-2 hover:bg-green-100 transition-colors"
+                        className="flex-1 py-2.5 px-4 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center gap-2 font-medium hover:bg-emerald-100 transition-colors"
                         data-testid={`activate-card-${index}`}
                       >
                         <Play className="w-4 h-4" />
@@ -192,7 +228,7 @@ export default function Cards() {
                     ) : (
                       <button
                         onClick={() => freezeCard(card.id)}
-                        className="flex-1 py-2 px-3 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-100 transition-colors"
+                        className="flex-1 py-2.5 px-4 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center gap-2 font-medium hover:bg-blue-100 transition-colors"
                         data-testid={`freeze-card-${index}`}
                       >
                         <Snowflake className="w-4 h-4" />
@@ -201,7 +237,7 @@ export default function Cards() {
                     )}
                     <button
                       onClick={() => deleteCard(card.id)}
-                      className="py-2 px-3 bg-red-50 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-100 transition-colors"
+                      className="py-2.5 px-4 bg-red-50 text-red-600 rounded-xl flex items-center justify-center hover:bg-red-100 transition-colors"
                       data-testid={`delete-card-${index}`}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -216,51 +252,53 @@ export default function Cards() {
         {/* Create Card Modal */}
         {showCreateModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/50" onClick={() => setShowCreateModal(false)} />
-            <div className="relative bg-white rounded-xl p-6 w-full max-w-md" data-testid="create-card-modal">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCreateModal(false)} />
+            <div className="relative bg-white rounded-3xl p-8 w-full max-w-md animate-scale-in" data-testid="create-card-modal">
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="absolute top-4 right-4 text-[#64748B] hover:text-[#0A1628]"
+                className="absolute top-6 right-6 text-neutral-400 hover:text-neutral-600 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
 
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#C9A227]/10 flex items-center justify-center">
-                  <CreditCard className="w-8 h-8 text-[#C9A227]" />
+              <div className="text-center mb-8">
+                <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-[#D4A853] to-[#B8923E] flex items-center justify-center">
+                  <CreditCard className="w-10 h-10 text-[#0C0F1A]" />
                 </div>
-                <h2 className="text-xl font-display font-bold text-[#0A1628]">Create Virtual Card</h2>
-                <p className="text-[#64748B] text-sm mt-1">Instant virtual card for online purchases</p>
+                <h2 className="text-2xl font-display font-bold text-[#0C0F1A]">Create Virtual Card</h2>
+                <p className="text-neutral-500 mt-2">Instant virtual card for secure online purchases</p>
               </div>
 
               {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  {error}
+                <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <span className="font-medium">{error}</span>
                 </div>
               )}
 
-              <div className="space-y-4 mb-6">
-                <div className="p-4 bg-[#F8F9FA] rounded-lg">
-                  <div className="flex justify-between mb-2">
-                    <span className="text-[#64748B]">Card Type</span>
-                    <span className="font-medium text-[#0A1628]">Virtual</span>
-                  </div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-[#64748B]">Spending Limit</span>
-                    <span className="font-medium text-[#0A1628]">$5,000</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#64748B]">Validity</span>
-                    <span className="font-medium text-[#0A1628]">3 Years</span>
-                  </div>
+              <div className="space-y-3 mb-8 p-5 bg-neutral-50 rounded-2xl">
+                <div className="flex justify-between">
+                  <span className="text-neutral-500">Card Type</span>
+                  <span className="font-semibold text-[#0C0F1A]">Virtual</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-500">Spending Limit</span>
+                  <span className="font-semibold text-[#0C0F1A]">$5,000</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-500">Validity</span>
+                  <span className="font-semibold text-[#0C0F1A]">3 Years</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-500">Card Fee</span>
+                  <span className="font-semibold text-emerald-600">Free</span>
                 </div>
               </div>
 
               <button
                 onClick={createCard}
                 disabled={creating}
-                className="w-full btn-primary flex items-center justify-center gap-2 py-3 disabled:opacity-50"
+                className="w-full btn-primary flex items-center justify-center gap-2 py-4 disabled:opacity-50"
                 data-testid="confirm-create-card"
               >
                 {creating ? (

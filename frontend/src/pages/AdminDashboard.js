@@ -9,7 +9,9 @@ import {
   DollarSign, 
   TrendingUp, 
   ArrowUpRight,
-  Activity
+  Activity,
+  Wallet,
+  ArrowRight
 } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -48,70 +50,71 @@ export default function AdminDashboard() {
       label: "Total Users",
       value: stats?.total_users || 0,
       icon: Users,
-      color: "bg-blue-500",
+      gradient: "from-blue-500 to-blue-600",
       path: "/admin/users"
     },
     {
       label: "Active Users",
       value: stats?.active_users || 0,
       icon: Activity,
-      color: "bg-green-500",
+      gradient: "from-emerald-500 to-emerald-600",
       path: "/admin/users"
     },
     {
       label: "Total Transactions",
       value: stats?.total_transactions || 0,
       icon: FileText,
-      color: "bg-purple-500",
+      gradient: "from-purple-500 to-purple-600",
       path: "/admin/transactions"
     },
     {
       label: "Total Volume",
       value: formatCurrency(stats?.total_volume || 0),
       icon: TrendingUp,
-      color: "bg-orange-500",
+      gradient: "from-orange-500 to-orange-600",
       path: "/admin/transactions"
     },
     {
-      label: "Total Balance (All Accounts)",
+      label: "Total Balance",
       value: formatCurrency(stats?.total_balance || 0),
-      icon: DollarSign,
-      color: "bg-[#C9A227]",
+      icon: Wallet,
+      gradient: "from-[#D4A853] to-[#B8923E]",
       path: "/admin/users"
     }
   ];
 
   return (
     <DashboardLayout>
-      <div data-testid="admin-dashboard">
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold text-[#0A1628]">Admin Dashboard</h1>
-          <p className="text-[#64748B]">Overview of system statistics</p>
+      <div className="space-y-8 animate-fade-in" data-testid="admin-dashboard">
+        {/* Header */}
+        <div>
+          <h1 className="font-display text-3xl font-bold text-[#0C0F1A] mb-2">Admin Dashboard</h1>
+          <p className="text-neutral-500">Overview of system statistics and management</p>
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-12">
+          <div className="flex justify-center py-20">
             <div className="spinner" />
           </div>
         ) : (
           <>
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {statCards.map((stat, index) => (
                 <div
                   key={index}
                   onClick={() => navigate(stat.path)}
-                  className="bg-white rounded-xl border border-[#E2E8F0] p-6 hover:border-[#C9A227] transition-colors cursor-pointer group"
+                  className="card p-6 cursor-pointer group hover:scale-[1.02] transition-all duration-300"
                   data-testid={`stat-${stat.label.toLowerCase().replace(/\s/g, '-')}`}
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`w-12 h-12 ${stat.color} rounded-xl flex items-center justify-center`}>
-                      <stat.icon className="w-6 h-6 text-white" />
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                      <stat.icon className="w-7 h-7 text-white" />
                     </div>
-                    <ArrowUpRight className="w-5 h-5 text-[#64748B] group-hover:text-[#C9A227] transition-colors" />
+                    <ArrowUpRight className="w-5 h-5 text-neutral-300 group-hover:text-[#D4A853] transition-colors" />
                   </div>
-                  <p className="text-[#64748B] text-sm mb-1">{stat.label}</p>
-                  <p className="text-3xl font-bold text-[#0A1628]">
+                  <p className="text-neutral-500 text-sm mb-1">{stat.label}</p>
+                  <p className="text-3xl font-bold text-[#0C0F1A]">
                     {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
                   </p>
                 </div>
@@ -119,24 +122,40 @@ export default function AdminDashboard() {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-xl border border-[#E2E8F0] p-6">
-              <h2 className="text-lg font-semibold text-[#0A1628] mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="card overflow-hidden">
+              <div className="p-6 border-b border-neutral-100">
+                <h2 className="text-lg font-bold text-[#0C0F1A]">Quick Actions</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-neutral-100">
                 <button
                   onClick={() => navigate("/admin/users")}
-                  className="p-4 bg-[#F8F9FA] rounded-lg text-left hover:bg-[#F1F5F9] transition-colors"
+                  className="p-6 text-left hover:bg-neutral-50 transition-colors group"
                 >
-                  <Users className="w-6 h-6 text-[#C9A227] mb-2" />
-                  <p className="font-semibold text-[#0A1628]">Manage Users</p>
-                  <p className="text-sm text-[#64748B]">View, edit, or deactivate user accounts</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Users className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-[#0C0F1A]">Manage Users</p>
+                      <p className="text-sm text-neutral-500">View, edit, or deactivate accounts</p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-neutral-300 group-hover:text-[#D4A853] group-hover:translate-x-1 transition-all" />
+                  </div>
                 </button>
                 <button
                   onClick={() => navigate("/admin/transactions")}
-                  className="p-4 bg-[#F8F9FA] rounded-lg text-left hover:bg-[#F1F5F9] transition-colors"
+                  className="p-6 text-left hover:bg-neutral-50 transition-colors group"
                 >
-                  <FileText className="w-6 h-6 text-[#C9A227] mb-2" />
-                  <p className="font-semibold text-[#0A1628]">View Transactions</p>
-                  <p className="text-sm text-[#64748B]">Monitor all system transactions</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <FileText className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-[#0C0F1A]">View Transactions</p>
+                      <p className="text-sm text-neutral-500">Monitor all system transactions</p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-neutral-300 group-hover:text-[#D4A853] group-hover:translate-x-1 transition-all" />
+                  </div>
                 </button>
               </div>
             </div>

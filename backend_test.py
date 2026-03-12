@@ -8,7 +8,7 @@ import time
 import uuid
 
 class LondwayFondBankTester:
-    def __init__(self, base_url="https://question-site.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://bank-preview-live.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.user_token = None
         self.admin_token = None
@@ -245,7 +245,7 @@ class LondwayFondBankTester:
         """Test creating a deposit (Stripe checkout)"""
         deposit_data = {
             "amount": 100.00,
-            "origin_url": "https://question-site.preview.emergentagent.com"
+            "origin_url": "https://bank-preview-live.preview.emergentagent.com"
         }
         
         success, response = self.run_test(

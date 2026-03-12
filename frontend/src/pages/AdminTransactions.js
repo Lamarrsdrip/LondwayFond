@@ -9,7 +9,7 @@ import {
   Clock,
   ChevronLeft,
   ChevronRight,
-  Filter
+  X
 } from "lucide-react";
 
 export default function AdminTransactions() {
@@ -68,36 +68,35 @@ export default function AdminTransactions() {
     switch (type) {
       case 'deposit':
       case 'transfer_in':
-        return <ArrowDownLeft className="w-5 h-5 text-green-500" />;
+        return <ArrowDownLeft className="w-5 h-5" />;
       case 'transfer_out':
       case 'withdrawal':
-        return <ArrowUpRight className="w-5 h-5 text-red-500" />;
+        return <ArrowUpRight className="w-5 h-5" />;
       default:
-        return <Clock className="w-5 h-5 text-[#64748B]" />;
+        return <Clock className="w-5 h-5" />;
     }
   };
 
-  const getAmountClass = (type) => {
-    return ['deposit', 'transfer_in'].includes(type) ? 'text-green-600' : 'text-red-600';
+  const getTransactionColor = (type) => {
+    return ['deposit', 'transfer_in'].includes(type) ? 'text-emerald-500 bg-emerald-50' : 'text-red-500 bg-red-50';
   };
 
   const totalPages = Math.ceil(total / limit);
 
   return (
     <DashboardLayout>
-      <div data-testid="admin-transactions-page">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="font-display text-3xl font-bold text-[#0A1628]">All Transactions</h1>
-            <p className="text-[#64748B]">{total} transactions total</p>
-          </div>
+      <div className="space-y-6 animate-fade-in" data-testid="admin-transactions-page">
+        {/* Header */}
+        <div>
+          <h1 className="font-display text-3xl font-bold text-[#0C0F1A] mb-2">All Transactions</h1>
+          <p className="text-neutral-500">{total} transactions total</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 mb-6">
+        <div className="card p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
                 type="text"
                 value={userId}
@@ -106,7 +105,7 @@ export default function AdminTransactions() {
                   setPage(0);
                 }}
                 placeholder="Filter by User ID..."
-                className="w-full pl-10 pr-4 py-2.5 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-[#C9A227]"
+                className="w-full pl-12 pr-4 py-3 bg-neutral-50 border-2 border-transparent rounded-xl focus:border-[#D4A853] focus:bg-white transition-all outline-none"
                 data-testid="filter-user-id"
               />
             </div>
@@ -116,8 +115,9 @@ export default function AdminTransactions() {
                   setUserId("");
                   setPage(0);
                 }}
-                className="px-4 py-2.5 text-[#64748B] hover:text-[#0A1628] border border-[#E2E8F0] rounded-lg"
+                className="flex items-center gap-2 px-4 py-3 text-neutral-500 hover:text-neutral-700 bg-neutral-100 hover:bg-neutral-200 rounded-xl transition-colors"
               >
+                <X className="w-4 h-4" />
                 Clear Filter
               </button>
             )}
@@ -125,16 +125,18 @@ export default function AdminTransactions() {
         </div>
 
         {/* Transactions Table */}
-        <div className="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
+        <div className="card overflow-hidden">
           {loading ? (
-            <div className="p-8 flex justify-center">
+            <div className="p-12 flex justify-center">
               <div className="spinner" />
             </div>
           ) : transactions.length === 0 ? (
-            <div className="p-12 text-center">
-              <Clock className="w-16 h-16 mx-auto mb-4 text-[#E2E8F0]" />
-              <h3 className="text-lg font-semibold text-[#0A1628] mb-2">No Transactions Found</h3>
-              <p className="text-[#64748B]">
+            <div className="p-16 text-center">
+              <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-neutral-100 flex items-center justify-center">
+                <Clock className="w-10 h-10 text-neutral-400" />
+              </div>
+              <h3 className="font-semibold text-[#0C0F1A] mb-2 text-lg">No Transactions Found</h3>
+              <p className="text-neutral-500">
                 {userId ? "No transactions for this user" : "No transactions in the system"}
               </p>
             </div>
@@ -142,59 +144,59 @@ export default function AdminTransactions() {
             <>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-[#F8F9FA] border-b border-[#E2E8F0]">
-                    <tr>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-[#64748B]">Type</th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-[#64748B]">User ID</th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-[#64748B]">Description</th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-[#64748B]">Date</th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-[#64748B]">Status</th>
-                      <th className="text-right px-6 py-4 text-sm font-semibold text-[#64748B]">Amount</th>
+                  <thead>
+                    <tr className="bg-neutral-50 border-b border-neutral-100">
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-neutral-500">Type</th>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-neutral-500">User ID</th>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-neutral-500">Description</th>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-neutral-500">Date</th>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-neutral-500">Status</th>
+                      <th className="text-right px-6 py-4 text-sm font-semibold text-neutral-500">Amount</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E2E8F0]">
+                  <tbody className="divide-y divide-neutral-100">
                     {transactions.map((tx) => (
-                      <tr key={tx.id} className="transaction-row">
+                      <tr key={tx.id} className="hover:bg-neutral-50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-[#F1F5F9] flex items-center justify-center">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${getTransactionColor(tx.type)}`}>
                               {getTransactionIcon(tx.type)}
                             </div>
-                            <span className="capitalize text-[#0A1628] font-medium">
+                            <span className="capitalize font-medium text-[#0C0F1A]">
                               {tx.type.replace('_', ' ')}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <p className="font-mono text-xs text-[#64748B] truncate max-w-[120px]" title={tx.user_id}>
-                            {tx.user_id}
+                          <p className="font-mono text-xs text-neutral-500 truncate max-w-[120px]" title={tx.user_id}>
+                            {tx.user_id.slice(0, 8)}...
                           </p>
                         </td>
                         <td className="px-6 py-4">
-                          <p className="text-[#0A1628]">{tx.description}</p>
-                          <div className="text-xs text-[#64748B] font-mono mt-1">
+                          <p className="text-[#0C0F1A] font-medium">{tx.description}</p>
+                          <div className="text-xs text-neutral-500 font-mono mt-1">
                             {tx.sender_account && tx.sender_account !== 'SYSTEM' && tx.sender_account !== 'STRIPE' && (
-                              <span className="mr-2">From: {tx.sender_account}</span>
+                              <span className="mr-3">From: {tx.sender_account}</span>
                             )}
                             {tx.recipient_account && (
                               <span>To: {tx.recipient_account}</span>
                             )}
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-[#64748B] text-sm">
+                        <td className="px-6 py-4 text-neutral-500 text-sm">
                           {formatDate(tx.created_at)}
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                            tx.status === 'completed' 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-yellow-100 text-yellow-700'
+                          <span className={`badge ${
+                            tx.status === 'completed' ? 'badge-success' : 'badge-warning'
                           }`}>
                             {tx.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <span className={`font-mono font-semibold ${getAmountClass(tx.type)}`}>
+                          <span className={`font-mono font-bold ${
+                            ['deposit', 'transfer_in'].includes(tx.type) ? 'text-emerald-600' : 'text-red-600'
+                          }`}>
                             {['deposit', 'transfer_in'].includes(tx.type) ? '+' : '-'}
                             {formatCurrency(tx.amount)}
                           </span>
@@ -207,25 +209,25 @@ export default function AdminTransactions() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="px-6 py-4 border-t border-[#E2E8F0] flex items-center justify-between">
-                  <p className="text-sm text-[#64748B]">
+                <div className="px-6 py-4 border-t border-neutral-100 flex items-center justify-between">
+                  <p className="text-sm text-neutral-500">
                     Showing {page * limit + 1} - {Math.min((page + 1) * limit, total)} of {total}
                   </p>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setPage(p => Math.max(0, p - 1))}
                       disabled={page === 0}
-                      className="p-2 hover:bg-[#F1F5F9] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 hover:bg-neutral-100 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
-                    <span className="text-sm text-[#0A1628]">
-                      Page {page + 1} of {totalPages}
+                    <span className="text-sm text-[#0C0F1A] px-3">
+                      {page + 1} / {totalPages}
                     </span>
                     <button
                       onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                       disabled={page >= totalPages - 1}
-                      className="p-2 hover:bg-[#F1F5F9] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 hover:bg-neutral-100 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>

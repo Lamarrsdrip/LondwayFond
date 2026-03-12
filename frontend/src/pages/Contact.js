@@ -89,16 +89,7 @@ export default function Contact() {
 
                   <div className="flex items-center gap-3">
                     <Phone className="w-5 h-5 text-[#C9A227] flex-shrink-0" />
-                    <div>
-                      <a href={`tel:${office.phone}`} className="text-[#0A1628] hover:text-[#C9A227] transition-colors">
-                        {office.phone}
-                      </a>
-                      {office.vipOnly && (
-                        <span className="ml-2 text-xs px-2 py-0.5 bg-[#C9A227] text-[#0A1628] rounded-full font-semibold">
-                          VIP Only
-                        </span>
-                      )}
-                    </div>
+                    <span className="text-[#C9A227] font-semibold italic">VIP only</span>
                   </div>
 
                   <div className="flex items-center gap-3">

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Clock, ArrowRight, Building2 } from "lucide-react";
-
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_question-site/artifacts/4k3lqwwb_WhatsApp%20Image%202026-03-12%20at%2010.33.36.jpeg";
+import { Logo } from "@/components/Logo";
 
 const offices = [
   {
@@ -29,9 +28,7 @@ export default function Contact() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 logo-hover" data-testid="logo-link">
-              <img src={LOGO_URL} alt="LONDWAYFOND Bank" className="h-12 w-auto" />
-            </Link>
+            <Logo size="default" />
             
             <div className="flex items-center gap-4">
               <Link to="/login" className="text-[#0A1628] hover:text-[#C9A227] transition-colors font-medium" data-testid="nav-login">
@@ -196,9 +193,13 @@ export default function Contact() {
       <footer className="bg-[#020617] py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <img src={LOGO_URL} alt="LONDWAYFOND Bank" className="h-12 w-auto" />
+            <div className="font-display font-bold text-xl">
+              <span className="text-white">Londway</span>
+              <span className="text-[#C9A227]">Fond</span>
+              <span className="text-[#94A3B8] text-xs ml-1 font-normal tracking-wider uppercase">Bank</span>
+            </div>
             <p className="text-[#64748B] text-sm">
-              © 2026 LONDWAYFOND Bank. All rights reserved.
+              © 2026 LondwayFond Bank. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <Link to="/" className="text-[#64748B] hover:text-[#C9A227] transition-colors text-sm">

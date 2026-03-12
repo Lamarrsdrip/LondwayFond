@@ -130,11 +130,10 @@ export default function Cards() {
                 {/* Card Visual */}
                 <div className={`virtual-card ${index % 2 === 0 ? '' : 'virtual-card-gold'} aspect-[1.586/1]`}>
                   <div className="flex justify-between items-start mb-8">
-                    <img 
-                      src="https://customer-assets.emergentagent.com/job_question-site/artifacts/4k3lqwwb_WhatsApp%20Image%202026-03-12%20at%2010.33.36.jpeg" 
-                      alt="LONDWAYFOND" 
-                      className="h-8 w-auto opacity-90"
-                    />
+                    <div className="font-display font-bold text-lg">
+                      <span className={index % 2 === 0 ? 'text-white' : 'text-[#0A1628]'}>Londway</span>
+                      <span className="text-[#C9A227]">Fond</span>
+                    </div>
                     <Wifi className="w-6 h-6 rotate-90 opacity-70" />
                   </div>
                   

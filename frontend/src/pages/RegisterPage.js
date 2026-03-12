@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/App";
 import { Eye, EyeOff, ArrowRight, AlertCircle, Check } from "lucide-react";
-
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_question-site/artifacts/4k3lqwwb_WhatsApp%20Image%202026-03-12%20at%2010.33.36.jpeg";
+import { Logo } from "@/components/Logo";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -70,7 +69,11 @@ export default function RegisterPage() {
         <div className="absolute inset-0 bg-[#0A1628]/60" />
         <div className="absolute top-12 left-12">
           <Link to="/">
-            <img src={LOGO_URL} alt="LONDWAYFOND Bank" className="h-16 w-auto" />
+            <div className="font-display font-bold text-2xl">
+              <span className="text-white">Londway</span>
+              <span className="text-[#C9A227]">Fond</span>
+              <span className="text-[#94A3B8] text-xs ml-1 font-normal tracking-wider uppercase">Bank</span>
+            </div>
           </Link>
         </div>
         <div className="absolute bottom-12 left-12 right-12">
@@ -93,9 +96,9 @@ export default function RegisterPage() {
       {/* Right Side - Form */}
       <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 py-12 bg-white overflow-y-auto">
         <div className="max-w-md w-full mx-auto">
-          <Link to="/" className="inline-block mb-8 lg:hidden">
-            <img src={LOGO_URL} alt="LONDWAYFOND Bank" className="h-14 w-auto" />
-          </Link>
+          <div className="mb-8 lg:hidden">
+            <Logo size="default" />
+          </div>
 
           <h1 className="font-display text-4xl font-bold text-[#0A1628] mb-2">
             Open Your Account

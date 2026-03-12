@@ -14,9 +14,8 @@ import {
   Menu,
   X
 } from "lucide-react";
-import { useState } from "react";
 
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_question-site/artifacts/4k3lqwwb_WhatsApp%20Image%202026-03-12%20at%2010.33.36.jpeg";
+import { useState } from "react";
 
 const userNavItems = [
   { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -54,8 +53,9 @@ export const DashboardLayout = ({ children }) => {
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E2E8F0] px-4 py-3">
         <div className="flex items-center justify-between">
-          <Link to="/">
-            <img src={LOGO_URL} alt="LONDWAYFOND" className="h-10 w-auto" />
+          <Link to="/" className="font-display font-bold text-xl">
+            <span className="text-[#0A1628]">Londway</span>
+            <span className="text-[#C9A227]">Fond</span>
           </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -81,8 +81,10 @@ export const DashboardLayout = ({ children }) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-[#1E3A5F]">
-            <Link to="/" onClick={() => setMobileMenuOpen(false)}>
-              <img src={LOGO_URL} alt="LONDWAYFOND" className="h-12 w-auto" />
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="font-display font-bold text-xl">
+              <span className="text-white">Londway</span>
+              <span className="text-[#C9A227]">Fond</span>
+              <span className="text-[#94A3B8] text-xs ml-1 font-normal tracking-wider uppercase">Bank</span>
             </Link>
           </div>
 

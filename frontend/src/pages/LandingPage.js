@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/App";
 import { Shield, ArrowRight, Send, CreditCard, Building2, Globe2, ChevronRight, Phone, Mail, MapPin } from "lucide-react";
-
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_question-site/artifacts/4k3lqwwb_WhatsApp%20Image%202026-03-12%20at%2010.33.36.jpeg";
+import { Logo } from "@/components/Logo";
 
 const features = [
   {
@@ -43,9 +42,7 @@ export default function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 logo-hover" data-testid="logo-link">
-              <img src={LOGO_URL} alt="LONDWAYFOND Bank" className="h-12 w-auto" />
-            </Link>
+            <Logo size="default" />
             
             <div className="hidden md:flex items-center gap-8">
               <Link to="/contact" className="text-[#0A1628] hover:text-[#C9A227] transition-colors font-medium" data-testid="nav-contact">
@@ -272,7 +269,11 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div>
-              <img src={LOGO_URL} alt="LONDWAYFOND Bank" className="h-16 w-auto mb-6" />
+              <div className="font-display font-bold text-2xl mb-6">
+                <span className="text-white">Londway</span>
+                <span className="text-[#C9A227]">Fond</span>
+                <span className="text-[#94A3B8] text-xs ml-1 font-normal tracking-wider uppercase">Bank</span>
+              </div>
               <p className="text-[#94A3B8] text-sm leading-relaxed">
                 Premium banking solutions for individuals and businesses worldwide.
               </p>
@@ -332,7 +333,7 @@ export default function LandingPage() {
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-[#64748B] text-sm">
-              © 2026 LONDWAYFOND Bank. All rights reserved.
+              © 2026 LondwayFond Bank. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <a href="#" className="text-[#64748B] hover:text-[#C9A227] transition-colors text-sm">

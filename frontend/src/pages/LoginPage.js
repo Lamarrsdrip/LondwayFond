@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/App";
 import { Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
-
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_question-site/artifacts/4k3lqwwb_WhatsApp%20Image%202026-03-12%20at%2010.33.36.jpeg";
+import { Logo } from "@/components/Logo";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -37,9 +36,9 @@ export default function LoginPage() {
       {/* Left Side - Form */}
       <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 py-12 bg-white">
         <div className="max-w-md w-full mx-auto">
-          <Link to="/" className="inline-block mb-12">
-            <img src={LOGO_URL} alt="LONDWAYFOND Bank" className="h-16 w-auto" />
-          </Link>
+          <div className="mb-12">
+            <Logo size="large" />
+          </div>
 
           <h1 className="font-display text-4xl font-bold text-[#0A1628] mb-2">
             Welcome Back
@@ -118,13 +117,6 @@ export default function LoginPage() {
               Open Account
             </Link>
           </p>
-
-          <div className="mt-8 p-4 bg-[#F8F9FA] rounded-lg">
-            <p className="text-sm text-[#64748B]">
-              <strong className="text-[#0A1628]">Demo Admin:</strong><br />
-              admin@londwayfond.com / Admin@123
-            </p>
-          </div>
         </div>
       </div>
 

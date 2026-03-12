@@ -17,7 +17,7 @@ import {
   Search,
   ChevronRight
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const userNavItems = [
   { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -39,6 +39,18 @@ export const DashboardLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const isAdmin = user?.is_admin;
   const isAdminRoute = location.pathname.startsWith("/admin");
@@ -209,14 +221,37 @@ export const DashboardLayout = ({ children }) => {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
             <div className="w-px h-8 bg-neutral-200"></div>
-            <div className="flex items-center gap-3 pl-2">
-              <div className="text-right">
-                <p className="text-sm font-semibold text-neutral-800">{user?.first_name} {user?.last_name}</p>
-                <p className="text-xs text-neutral-500">{isAdminRoute ? 'Administrator' : 'Personal Account'}</p>
-              </div>
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D4A853] to-[#B8923E] flex items-center justify-center text-[#0C0F1A] font-bold">
-                {user?.first_name?.[0]}{user?.last_name?.[0]}
-              </div>
+            <div className="relative" ref={profileMenuRef}>
+              <button 
+                onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                className="flex items-center gap-3 pl-2 hover:bg-neutral-100 rounded-xl p-2 transition-colors cursor-pointer"
+                data-testid="profile-menu-toggle"
+              >
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-neutral-800">{user?.first_name} {user?.last_name}</p>
+                  <p className="text-xs text-neutral-500">{isAdminRoute ? 'Administrator' : 'Personal Account'}</p>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D4A853] to-[#B8923E] flex items-center justify-center text-[#0C0F1A] font-bold">
+                  {user?.first_name?.[0]}{user?.last_name?.[0]}
+                </div>
+              </button>
+              {profileMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-neutral-200 overflow-hidden z-50">
+                  <Link to="/profile" onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors" data-testid="profile-menu-profile">
+                    <User className="w-4 h-4" />
+                    <span>My Profile</span>
+                  </Link>
+                  <div className="border-t border-neutral-100" />
+                  <button 
+                    onClick={() => { setProfileMenuOpen(false); handleLogout(); }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                    data-testid="profile-menu-logout"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -228,7 +263,7 @@ export const DashboardLayout = ({ children }) => {
 
       {/* Mobile Bottom Nav */}
       <div className="mobile-nav">
-        {userNavItems.slice(0, 5).map((item) => (
+        {userNavItems.slice(0, 4).map((item) => (
           <Link
             key={item.path}
             to={item.path}
@@ -242,6 +277,14 @@ export const DashboardLayout = ({ children }) => {
             <span className="text-[10px] font-medium">{item.label.split(' ')[0]}</span>
           </Link>
         ))}
+        <button
+          onClick={handleLogout}
+          className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors text-red-400"
+          data-testid="mobile-logout-button"
+        >
+          <LogOut className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Logout</span>
+        </button>
       </div>
     </div>
   );

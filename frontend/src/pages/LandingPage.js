@@ -309,7 +309,7 @@ export default function LandingPage() {
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-[#C9A227]" />
-                  +44 20 7000 0000
+                  <span className="text-[#C9A227] italic">VIP only</span>
                 </p>
               </div>
             </div>
@@ -323,7 +323,7 @@ export default function LandingPage() {
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-[#C9A227]" />
-                  +1 212 000 0000
+                  <span className="text-[#C9A227] italic">VIP only</span>
                 </p>
               </div>
             </div>

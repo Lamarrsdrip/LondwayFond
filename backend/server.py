@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import bcrypt
 import jwt
-# from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
+from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -370,22 +370,22 @@ async def create_deposit(deposit: DepositRequest, request: Request, user: dict =
     host_url = str(request.base_url).rstrip('/')
     webhook_url = f"{host_url}/api/webhook/stripe"
     
-    # stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
     
     success_url = f"{deposit.origin_url}/dashboard?payment=success&session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{deposit.origin_url}/dashboard?payment=cancelled"
     
-    # checkout_request = CheckoutSessionRequest(
-    #     amount=float(deposit.amount),
-    #     currency="usd",
-    #     success_url=success_url,
-    #     cancel_url=cancel_url,
-    #     metadata={
-    #         "user_id": user["id"],
-    #         "account_number": user["account_number"],
-    #         "type": "deposit"
-    #     }
-    # )
+    checkout_request = CheckoutSessionRequest(
+        amount=float(deposit.amount),
+        currency="usd",
+        success_url=success_url,
+        cancel_url=cancel_url,
+        metadata={
+            "user_id": user["id"],
+            "account_number": user["account_number"],
+            "type": "deposit"
+        }
+    )
     
     session = await stripe_checkout.create_checkout_session(checkout_request)
     
@@ -466,7 +466,7 @@ async def stripe_webhook(request: Request):
     host_url = str(request.base_url).rstrip('/')
     webhook_url = f"{host_url}/api/webhook/stripe"
     
-    # stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
     
     try:
         webhook_response = await stripe_checkout.handle_webhook(body, signature)
